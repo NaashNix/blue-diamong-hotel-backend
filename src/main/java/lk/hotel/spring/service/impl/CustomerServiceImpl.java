@@ -36,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
         String password = generator.generatePassword();
         System.out.println("Password : "+password);
 
-        sender.SendCredentials(username,password,customerDTO.getEmail());
+        sender.SendCredentials(username,password,customerDTO.getEmail(),customerDTO.getFirstName());
 
 
 //        if (!repo.existsById(customerDTO.getUserID())) {

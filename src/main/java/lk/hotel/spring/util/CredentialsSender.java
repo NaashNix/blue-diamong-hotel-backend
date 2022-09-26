@@ -10,7 +10,7 @@ import java.util.Properties;
 
 @Component
 public class CredentialsSender {
-    public void SendCredentials(String username, String password, String receipt){
+    public void SendCredentials(String username, String password, String receipt, String firstName){
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
@@ -27,9 +27,14 @@ public class CredentialsSender {
             }
         });
 
-        String messageBody = password + "-" +username;
+        String messageBody = ("<h4>Dear "+firstName +", Welcome to Blue Diamond Hotel</h4>" +
+                "<p>Use below credentials to login to your account. Don't share your credentials with anyone." +
+                "If you want any assistance call us on : +(94)702053777</p> <br>" +
+                "<code>Username : <b>"+username+"</b></code><br>" +
+                "<code>Password : <b>"+password+"</b></code><br>" +
+                "<i>Thank You! <br> Blue Diamond Hotel Team</i>");
 
-        Message message = prepareMessage(session, myAccountEmail, receipt, messageBody);
+        Message message = prepareMessage(session, myAccountEmail, receipt, messageBody, firstName);
         try {
             Transport.send(message);
         } catch (MessagingException messagingException) {
@@ -38,11 +43,11 @@ public class CredentialsSender {
 
     }
 
-    private static Message prepareMessage(Session session, String myAccountEmail, String recepient, String msgBody) {
+    private static Message prepareMessage(Session session, String myAccountEmail, String receipt, String msgBody, String firstName) {
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(myAccountEmail));
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(receipt));
             message.setSubject("Welcome To Blue Diamond Hotel Chain");
             /*String htmlCode = "<h1> WE LOVE JAVA </h1> <br/> <h2><b>Next Line </b></h2>";*/
             message.setContent(msgBody, "text/html");
