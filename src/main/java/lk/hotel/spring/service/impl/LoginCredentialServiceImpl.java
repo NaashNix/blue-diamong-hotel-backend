@@ -23,16 +23,20 @@ public class LoginCredentialServiceImpl implements LoginCredentialService {
 
 
     @Override
-    public LoginCredentialsDTO searchLogins(String username, String password) {
-
-        return mapper.map(repo.findById(username).get(), LoginCredentialsDTO.class);
-
+    public String checkLogin(String username, String password) {
+        if(repo.existsById(username)){
+            LoginCredentials cEntity = repo.findById(username).get();
+            if(password.equals(cEntity.getPassword())){
+                return cEntity.getRole();
+            }
+            return null;
+        }
+        return null;
     }
 
     @Override
-    public boolean findIsExists(String username) {
-        LoginCredentials loginCredentials = repo.findById(username).get();
-        return loginCredentials != null;
+    public boolean findIsExists(String username) throws InterruptedException {
+        return repo.existsById(username);
     }
 
 

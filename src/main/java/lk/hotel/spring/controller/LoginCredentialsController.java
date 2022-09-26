@@ -2,12 +2,10 @@ package lk.hotel.spring.controller;
 
 import lk.hotel.spring.dto.LoginCredentialsDTO;
 import lk.hotel.spring.service.LoginCredentialService;
+import lk.hotel.spring.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/login")
@@ -17,14 +15,14 @@ public class LoginCredentialsController {
     @Autowired
     LoginCredentialService service;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public LoginCredentialsDTO findUser() {
-        LoginCredentialsDTO naashnix = service.searchLogins("naashnix", "1234");
-        return naashnix;
+
+    @GetMapping(params = {"username","password"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseUtil checkLogin(@RequestParam String username, @RequestParam String password) {
+        return new ResponseUtil(200,"server_connected",service.checkLogin(username,password));
     }
 
     @GetMapping(params = {"username"})
-    public boolean findIsExists(String username) {
+    public boolean findIsExists(String username) throws InterruptedException {
         return service.findIsExists(username);
     }
 }

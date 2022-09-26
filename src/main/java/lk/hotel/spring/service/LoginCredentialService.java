@@ -5,7 +5,7 @@ import lk.hotel.spring.dto.LoginCredentialsDTO;
 
 public interface LoginCredentialService {
 
-    public LoginCredentialsDTO searchLogins(String username, String password);
+    public String checkLogin(String username, String password);
 
-    public boolean findIsExists(String username);
+    public boolean findIsExists(String username) throws InterruptedException;
 }
