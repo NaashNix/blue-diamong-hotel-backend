@@ -1,20 +1,17 @@
-package lk.hotel.spring.entity;
+package lk.hotel.spring.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.*;
 import java.sql.Date;
 
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @ToString
-public class Customer{
-    @Id
+@Data
+public class CustomerDTO {
     String userID;
     String firstName;
     String secondName;
@@ -22,10 +19,4 @@ public class Customer{
     String nicNumber;
     Date joinedDate;
     String username;
-
-    @OneToOne
-    @JoinColumn(name = "username", referencedColumnName = "username", insertable = false, updatable = false)
-    LoginCredentials loginCredentials;
-
 }
-
