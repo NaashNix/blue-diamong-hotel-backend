@@ -57,4 +57,14 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     }
+
+    @Override
+    public CustomerDTO getCustomerById(String username) {
+        if(repo.existsByUsername(username)){
+            System.out.println("USername  : "+username);
+            return mapper.map(repo.findByUsername(username),CustomerDTO.class);
+        }else {
+            throw new RuntimeException("user not exists.");
+        }
+    }
 }

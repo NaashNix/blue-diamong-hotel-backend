@@ -6,6 +6,7 @@ import lk.hotel.spring.repo.LoginCredentialsRepo;
 import lk.hotel.spring.service.LoginCredentialService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +29,15 @@ public class LoginCredentialServiceImpl implements LoginCredentialService {
             LoginCredentials cEntity = repo.findById(username).get();
             if(password.equals(cEntity.getPassword())){
                 return cEntity.getRole();
+            } else {
+                throw new RuntimeException("user not found");
             }
-            return null;
+
+        }else {
+            throw new RuntimeException("user not found");
         }
-        return null;
+
+
     }
 
     @Override

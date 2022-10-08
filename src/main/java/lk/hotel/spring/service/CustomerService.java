@@ -4,4 +4,7 @@ import lk.hotel.spring.dto.CustomerDTO;
 
 public interface CustomerService {
     boolean saveCustomer(CustomerDTO customerDTO);
+
+    CustomerDTO getCustomerById(String username);
+
 }
