@@ -8,4 +8,6 @@ public interface LoginCredentialService {
     public String checkLogin(String username, String password);
 
     public boolean findIsExists(String username) throws InterruptedException;
+
+    public boolean saveLogin(String username, String password);
 }

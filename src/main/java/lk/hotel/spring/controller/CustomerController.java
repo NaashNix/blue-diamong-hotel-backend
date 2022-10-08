@@ -23,10 +23,20 @@ public class CustomerController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseUtil saveCustomer(@ModelAttribute CustomerDTO customer){
+    public @ResponseBody ResponseUtil saveCustomer(@ModelAttribute CustomerDTO customer){
         System.out.println(customer.toString());
-        customerService.saveCustomer(customer);
-        return null;
+        try {
+            boolean b = customerService.saveCustomer(customer);
+            if(b){
+                return new ResponseUtil(200,"ADDED",null);
+            }else {
+                throw new RuntimeException("user registering failed");
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return new ResponseUtil(600,e.getMessage(),null);
+        }
+
     }
 
 }

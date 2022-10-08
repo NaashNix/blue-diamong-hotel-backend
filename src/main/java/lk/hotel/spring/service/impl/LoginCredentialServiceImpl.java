@@ -39,5 +39,17 @@ public class LoginCredentialServiceImpl implements LoginCredentialService {
         return repo.existsById(username);
     }
 
+    @Override
+    public boolean saveLogin(String username, String password) {
+        if(!repo.existsById(username)){
+            LoginCredentials entity = new LoginCredentials(username, password, "user");
+            LoginCredentials save = repo.save(entity);
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+
 
 }

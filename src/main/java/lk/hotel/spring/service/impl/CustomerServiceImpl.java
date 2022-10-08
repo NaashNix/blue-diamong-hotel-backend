@@ -4,8 +4,10 @@ import lk.hotel.spring.dto.CustomerDTO;
 import lk.hotel.spring.entity.Customer;
 import lk.hotel.spring.repo.CustomerRepo;
 import lk.hotel.spring.service.CustomerService;
+import lk.hotel.spring.service.LoginCredentialService;
 import lk.hotel.spring.util.CredentialsSender;
 import lk.hotel.spring.util.GenerateUsername;
+import lk.hotel.spring.util.ResponseUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,25 +29,32 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     ModelMapper mapper;
 
+    @Autowired
+    LoginCredentialService loginCredentialService;
+
     @Override
     public boolean saveCustomer(CustomerDTO customerDTO) {
 
         String username = generator.generateNewUsername();
-        System.out.println(username);
+        customerDTO.setUserID(username);
 
         String password = generator.generatePassword();
         System.out.println("Password : "+password);
 
-        sender.SendCredentials(username,password,customerDTO.getEmail(),customerDTO.getFirstName());
+            if (loginCredentialService.saveLogin(customerDTO.getUsername(), password)) {
+                if (!repo.existsById(customerDTO.getUserID())) {
+
+                    Customer save = repo.save(mapper.map(customerDTO, Customer.class));
+                    sender.SendCredentials(customerDTO.getUsername(), password, customerDTO.getEmail(), customerDTO.getFirstName());
+                    return true;
+
+                } else {
+                    throw new RuntimeException(username + "- already exist in the DB.");
+                }
+            } else {
+                throw new RuntimeException(username + " - user already in the database.login.");
+            }
 
 
-//        if (!repo.existsById(customerDTO.getUserID())) {
-//            Customer save = repo.save(mapper.map(customerDTO, Customer.class));
-//            return true;
-//        }else{
-//            throw new RuntimeException("Car already in the db.");
-//        }
-
-        return false;
     }
 }
